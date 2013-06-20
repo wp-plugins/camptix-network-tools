@@ -20,17 +20,16 @@ class CampTix_Network_Log_List_Table extends WP_List_Table {
 		$where = ' WHERE 1=1 ';
 
 		if ( isset( $_REQUEST['s'] ) ) {
-			check_admin_referer( 'dashboard_log_search_logs', 'dashboard_log_search_logs_nonce' );
 			$s = $_REQUEST['s'];
 			$advanced_query = explode( ':', $s );
 
 			switch ( $advanced_query[0] ) {
 				case 'id':
 					$this->log_highlight_id = absint( $advanced_query[1] );
-					$range = ceil( $per_page / 2 );
+					$range = floor( $per_page / 2 );
 
 					$advanced_query_value1 = $this->log_highlight_id - $range;
-					$advanced_query_value2 = $this->log_highlight_id + $range;
+					$advanced_query_value2 = $this->log_highlight_id + $range - 1;	// - 1 to avoid pagination
 					$advanced_query = "OR id BETWEEN %d AND %d";
 				break;
 
@@ -94,7 +93,7 @@ class CampTix_Network_Log_List_Table extends WP_List_Table {
 		}
 
 		$section = isset( $item->section ) ? esc_html( $item->section ) : 'general';
-		$url = add_query_arg( 'tix_log_section', $section, admin_url( 'index.php?tix_section=log&page=camptix-dashboard' ) );
+		$url = add_query_arg( 'tix_log_section', $section, network_admin_url( 'index.php?tix_section=log&page=camptix-dashboard' ) );
 		$actions[] = sprintf( '<a href="%s">%s</a>', esc_url( $url ), $section );
 
 		if ( $actions )
@@ -107,7 +106,7 @@ class CampTix_Network_Log_List_Table extends WP_List_Table {
 
 	function column_tix_domain( $item ) {
 		$url = str_replace( array( 'http://', 'https://' ), '', esc_url( get_home_url( $item->blog_id ) ) );
-		$link = add_query_arg( 'tix_log_blog_id', $item->blog_id, admin_url( 'index.php?tix_section=log&page=camptix-dashboard' ) );
+		$link = add_query_arg( 'tix_log_blog_id', $item->blog_id, network_admin_url( 'index.php?tix_section=log&page=camptix-dashboard' ) );
 
 		return sprintf( '<a href="%s">%s</a>', esc_url( $link ), $url );
 	}
