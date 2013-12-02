@@ -121,7 +121,10 @@ class CampTix_Network_Log_List_Table extends WP_List_Table {
 		$row_class['alternate'] = ! $row_class['alternate'];
 		$row_class['highlight'] = $item->id == $this->log_highlight_id ? true : false;
 
-		$item->data = json_decode( $item->data );
+		$data_json = json_decode( $item->data );
+		if ( JSON_ERROR_NONE == json_last_error() ) {
+			$item->data = $data_json;
+		}
 
 		echo '<tr class="' . ( $row_class['alternate'] ? 'alternate' : '' ) . ( $row_class['highlight'] ? ' highlight' : '' ) . '">';
 		echo $this->single_row_columns( $item );

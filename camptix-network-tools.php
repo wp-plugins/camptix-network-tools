@@ -137,15 +137,21 @@ class CampTix_Network_Tools {
 	/**
 	 * Logs to a db
 	 */
-	function camptix_log_raw( $message, $post_id, $data, $section = 'general' ) {
+	function camptix_log_raw( $message, $post_id, $data_raw, $section = 'general' ) {
 		global $wpdb, $blog_id, $camptix;
+
+		$data = json_encode( stripslashes_deep( $data_raw ) );
+		$json_last_error = json_last_error();
+		if ( JSON_ERROR_NONE != $json_last_error ) {
+			$data = sprintf( 'json_encode() error: code #%d. Raw data was: %s', $json_last_error, print_r( $data_raw, true ) );
+		}
 
 		$table_name = $wpdb->base_prefix . "camptix_log";
 		$wpdb->insert( $table_name, array(
 			'blog_id' => $blog_id,
 			'object_id' => $post_id,
 			'message' => $message,
-			'data' => json_encode( stripslashes_deep( $data ) ),
+			'data' => $data,
 			'section' => $section,
 		) );
 		$camptix->tmp( 'last_log_id', $wpdb->insert_id );
