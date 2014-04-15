@@ -88,7 +88,7 @@ class CampTix_Network_Dashboard {
 		foreach ( $blogs as $bid ) {
 			switch_to_blog( $bid );
 
-				$post = false;
+				$post = $meta = false;
 				if ( in_array( 'camptix/camptix.php', (array) apply_filters( 'active_plugins', get_option( 'active_plugins', array() ) ) ) ) {
 
 					$options = get_option( 'camptix_options' );
