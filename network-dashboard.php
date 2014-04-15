@@ -73,6 +73,21 @@ class CampTix_Network_Dashboard {
 	function gather_events_data() {
 		global $wpdb;
 
+		/*
+		 * We only want this function to run on the main site.
+		 *
+		 * In most cases, that's ID 1, but not always. If the admin sets a different BLOG_ID_CURRENT_SITE in wp-config,
+		 * then we still want to insert the data into site ID 1, because that's where the network dashboard is displayed,
+		 * and consequentially, where the data is pulled from. If it were only inserted into the main site, then the
+		 * Overview tab would be empty.
+		 *
+		 * Ideally we should display the dashboard on the main site instead of ID 1, but that would involve a lot of refactoring,
+		 * and maybe even a core patch, in order to do it properly. So, this is an ugly hack to make it work.
+		 */
+		if ( ! is_main_site() && 1 != get_current_blog_id() ) {
+			return;
+		}
+
 		// Update timestamp.
 		update_option( 'camptix_dashboard_timestamp', time() );
 
