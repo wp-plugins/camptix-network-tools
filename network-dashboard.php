@@ -67,6 +67,9 @@ class CampTix_Network_Dashboard {
 		}
 	}
 
+	/**
+	 * Gather data on all CampTix events for the Overview tab on the CampTix NT Dashboard
+	 */
 	function gather_events_data() {
 		global $wpdb;
 
