@@ -184,22 +184,29 @@ class CampTix_Network_Tools {
 		global $camptix;
 
 		$expressions = apply_filters( 'camptix_nt_notification_expressions', array() );
+		$expressions = $this->update_notification_expressions_format( $expressions );
 
 		if ( $expressions ) {
-			foreach ( $expressions as $expression => $addresses ) {
-				if ( preg_match( $expression, $message .' '. print_r( $data, true ) ) ) {
+			foreach ( $expressions as $expression ) {
+				if ( preg_match( $expression['pattern'], $message .' '. print_r( $data, true ) ) ) {
 					if ( is_int( $post_id ) && $post_id > 0 ) {
 						$user = "\nUser: " . esc_html( get_the_title( $post_id ) ) . ' (<'. esc_url_raw( get_admin_url( null, '/post.php?post='. $post_id .'&action=edit' ) ) .'>)';
 					} else {
 						$user = '';
 					}
 
+					$subject = 'CampTix Log Notification';
+					if ( ! empty( $expression['subject'] ) ) {
+						$subject .= ': '. sanitize_text_field( $expression['subject'] );
+					}
+
 					$email_body = sprintf(
-						"The following CampTix log entry matches an expression you've subscribed to.\n\nSite: %s%s\nMessage: %s\nRegular Expression: %s\nTimestamp: %s\n\nMore information is available in the Network Log: <%s>",
+						"%s\n\nSite: %s%s\nMessage: %s\nRegular Expression: %s\nTimestamp: %s\n\nMore information is available in the Network Log: <%s>",
+						! empty( $expression['message'] ) ? esc_html( $expression['message'] ) : "The following CampTix log entry matches an expression you've subscribed to.",
 						get_bloginfo( 'name' ),
 						$user,
 						esc_html( $message ),
-						esc_html( $expression ),
+						esc_html( $expression['pattern'] ),
 						date( 'Y-m-d H:i:s' ),	// assumes MySQL timezone matches PHP timezone, and that next clock tick hasn't occurred after record insertion
 						add_query_arg(
 							array(
@@ -211,11 +218,40 @@ class CampTix_Network_Tools {
 						)	// assumes recipient has access to Network Log
 					);
 
-					wp_mail( $addresses, 'CampTix Log Notification', $email_body );
-					break;
+					wp_mail( $expression['addresses'], $subject, $email_body );
 				}
 			}
 		}
+	}
+
+	/**
+	 * Update notifications to the current format.
+	 *
+	 * The previous formation was:
+	 *
+	 * array(
+	 *     'pattern1' => array( 'address1', 'address2, 'etc' ),
+	 *     'pattern2  => array( 'address1', 'address2, 'etc' ),
+	 * )
+	 *
+	 * This allows us to update to a more verbose and flexible format without breaking backwards compatibility.
+	 *
+	 * @param array $expressions
+	 * @return array
+	 */
+	protected function update_notification_expressions_format( $expressions ) {
+		foreach ( $expressions as $key => $value ) {
+			if ( ! isset( $value['subject'] ) ) {
+				$expressions[ $key ] = array(
+					'subject'   => '',
+					'message'   => '',
+					'pattern'   => $key,
+					'addresses' => $value,
+				);
+			}
+		}
+
+		return $expressions;
 	}
 
 	function __destruct() {
