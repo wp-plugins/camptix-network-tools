@@ -2,7 +2,7 @@
 Contributors: automattic, kovshenin, iandunn
 Tags: CampTix, ticketing, event ticketing, multisite, log
 Requires at least: 3.5
-Tested up to: 3.9.1
+Tested up to: 4.0
 Stable tag: 0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
