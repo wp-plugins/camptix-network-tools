@@ -86,7 +86,7 @@ class CampTix_Network_Log_List_Table extends WP_List_Table {
 		if ( isset( $item->object_id ) && $item->object_id > 0 ) {
 			$edit_url = get_admin_url( $item->blog_id, 'post.php' );
 			$edit_url = add_query_arg( array(
-				'post' => $item->object_id,
+				'post' => rawurlencode( $item->object_id ),
 				'action' => 'edit',
 			), $edit_url );
 			$actions[] = sprintf( '<a href="%s">%d</a>', esc_url( $edit_url ), $item->object_id );
@@ -106,7 +106,7 @@ class CampTix_Network_Log_List_Table extends WP_List_Table {
 
 	function column_tix_domain( $item ) {
 		$url = str_replace( array( 'http://', 'https://' ), '', esc_url( get_home_url( $item->blog_id ) ) );
-		$link = add_query_arg( 'tix_log_blog_id', $item->blog_id, network_admin_url( 'index.php?tix_section=log&page=camptix-dashboard' ) );
+		$link = add_query_arg( 'tix_log_blog_id', rawurlencode( $item->blog_id ), network_admin_url( 'index.php?tix_section=log&page=camptix-dashboard' ) );
 
 		return sprintf( '<a href="%s">%s</a>', esc_url( $link ), $url );
 	}
