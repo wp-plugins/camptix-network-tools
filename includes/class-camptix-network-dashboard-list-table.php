@@ -27,13 +27,13 @@ class CampTix_Network_Dashboard_List_Table extends WP_List_Table {
 			'tix_revenue' => 'tix_revenue',
 		);
 	}
-	
+
 	function get_views() {
 		return array(
-			'all' => '<a href="' . remove_query_arg( 'tix_view' ) . '">All</a>',
-			'active' => '<a href="' . remove_query_arg( 'tix_view' ) . '">Active</a>',
-			'sandbox' => '<a href="' . remove_query_arg( 'tix_view' ) . '">Sandboxed</a>',
-			'archived' => '<a href="' . remove_query_arg( 'tix_view' ) . '">Archived</a>',
+			'all' => '<a href="' . esc_url( remove_query_arg( 'tix_view' ) ) . '">All</a>',
+			'active' => '<a href="' . esc_url( remove_query_arg( 'tix_view' ) ) . '">Active</a>',
+			'sandbox' => '<a href="' . esc_url( remove_query_arg( 'tix_view' ) ) . '">Sandboxed</a>',
+			'archived' => '<a href="' . esc_url( remove_query_arg( 'tix_view' ) ) . '">Archived</a>',
 		);
 	}
 	

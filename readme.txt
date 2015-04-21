@@ -3,7 +3,7 @@ Contributors: automattic, kovshenin, iandunn
 Tags: CampTix, ticketing, event ticketing, multisite, log
 Requires at least: 3.5
 Tested up to: 4.2
-Stable tag: 0.1
+Stable tag: 0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -105,11 +105,17 @@ For help understanding regular expressions, check out <a href="http://www.marksa
 
 == Changelog ==
 
+= 0.2 (2015-04-20) =
+* Security: Escape links in wp-admin.
+
 = 0.1 (2013-06-18) =
 * Initial release
 
 
 == Upgrade Notice ==
+
+= 0.2 =
+This is a security release. Please update immediately.
 
 = 0.1 =
 CampTix Network Tools v0.1 includes a network dashboard, searchable log entries, transaction and attendee records, and e-mail notifications for custom log patterns.

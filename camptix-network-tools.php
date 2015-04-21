@@ -3,7 +3,7 @@
 * Plugin Name: CampTix Network Tools
 * Plugin URI: http://wordcamp.org
 * Description: Tools for managing CampTix installations across a WordPress Multisite network.
-* Version: 0.1
+* Version: 0.2
 * Author: Automattic
 * Author URI: http://wordcamp.org
 * License: GPLv2 or later
