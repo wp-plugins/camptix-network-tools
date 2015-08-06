@@ -270,7 +270,7 @@ class CampTix_Network_Dashboard {
 		?>
 		<div class="wrap">
 			<?php screen_icon( 'tools' ); ?>
-			<h2>CampTix Network Dashboard</h2>
+			<h1>CampTix Network Dashboard</h1>
 			<?php settings_errors(); ?>
 			<h3 class="nav-tab-wrapper"><?php $this->render_dashboard_tabs(); ?></h3>
 			<div id="tix">
